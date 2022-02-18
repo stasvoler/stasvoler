@@ -1,0 +1,105 @@
+<html>
+<head>
+    <title>Html-Qrcode Demo</title>
+<body>
+    <div id="qr-reader" style="width:500px"></div>
+    <div id="qr-reader-results"></div>
+</body>
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<script>
+    function docReady(fn) {
+        // see if DOM is already available
+        if (document.readyState === "complete"
+            || document.readyState === "interactive") {
+            // call on next available tick
+            setTimeout(fn, 1);
+        } else {
+            document.addEventListener("DOMContentLoaded", fn);
+        }
+    }
+
+    docReady(function () {
+        var resultContainer = document.getElementById('qr-reader-results');
+        var lastResult, countResults = 0;
+        function onScanSuccess(decodedText, decodedResult) {
+            if (decodedText !== lastResult) {
+                ++countResults;
+                lastResult = decodedText;
+                // Handle on success condition with the decoded message.
+                console.log(`Scan result ${decodedText}`, decodedResult);
+            }
+        }
+
+        var html5QrcodeScanner = new Html5QrcodeScanner(
+            "qr-reader", { fps: 10, qrbox: 250 });
+        html5QrcodeScanner.render(onScanSuccess);
+    });
+</script>
+</head>
+</html>
+
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>PDF.js Viewer</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+</head>
+
+<body>
+  <div id="reader" width="600px" height="400px"></div>
+</body>
+<script>
+var cameraId = "";
+
+  (function() {
+     // This method will trigger user permissions
+  Html5Qrcode.getCameras().then(devices => {
+    /**
+     * devices would be an array of objects of type:
+     * { id: "id", label: "label" }
+     */
+    if (devices && devices.length) {
+      cameraId = devices[0].id;
+      // .. use this to start scanning.
+    }
+  }).catch(err => {
+    // handle err
+  });
+  
+  
+  const html5QrCode = new Html5Qrcode("reader");
+  // html5QrCode.start(
+  //   cameraId, 
+  //   {
+  //     fps: 10,    // Optional, frame per seconds for qr code scanning
+  //     qrbox: { width: 250, height: 250 }  // Optional, if you want bounded box UI
+  //   },
+  //   (decodedText, decodedResult) => {
+  //     // do something when code is read
+  //   },
+  //   (errorMessage) => {
+  //     // parse error, ignore it.
+  //   })
+  // .catch((err) => {
+  //   // Start failed, handle it.
+  // });
+  const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+  html5QrCode.start({ deviceId: { exact: cameraId} }, config, (decodedText, decodedResult) => {
+      // do something when code is read
+    });
+  
+  
+  
+  })();
+  
+  </script>
+
+
+
+</html> -->
